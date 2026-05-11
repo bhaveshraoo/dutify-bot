@@ -12,8 +12,6 @@ from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler,
     MessageHandler, filters, ContextTypes, ConversationHandler
 )
-# test git
-
 from database import Database
 from scheduler import ReminderScheduler
 from config import BOT_TOKEN, REMINDER_LEAD_TIMES
