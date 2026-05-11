@@ -29,6 +29,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.env
+token.env
+__pycache__/
+*.db
 
 .config.py
 

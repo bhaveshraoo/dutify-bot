@@ -1,12 +1,16 @@
 """
 Configuration for DutyBot
 """
-
 import os
+from dotenv import load_dotenv
+
+load_dotenv()       
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # ── Bot Token ──────────────────────────────────────────────────
 # Set via environment variable or replace the placeholder below
-BOT_TOKEN = os.environ.get("8637737970:AAEwi1Lg2hj18o1AxxzsyQFXHEUWQR19BAI", "8637737970:AAEwi1Lg2hj18o1AxxzsyQFXHEUWQR19BAI")
+# BOT_TOKEN = os.environ.get("YOUR_ACTUAL_TOKEN_HERE")
 
 # ── Reminder Lead Time Options ─────────────────────────────────
 # Predefined reminder options shown to users (in minutes)
