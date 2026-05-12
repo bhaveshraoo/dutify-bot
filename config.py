@@ -2,9 +2,14 @@
 Configuration for DutyBot
 """
 import os
-from dotenv import load_dotenv
 
-load_dotenv()       
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # This will happen on Render, but it's okay because 
+    # Render already has the variables in its environment.
+    print("python-dotenv not found, skipping load_dotenv()") 
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
