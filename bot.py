@@ -16,8 +16,9 @@ from database import Database
 from scheduler import ReminderScheduler
 from config import BOT_TOKEN, REMINDER_LEAD_TIMES
 import os
-from flask import Flask
 from threading import Thread
+from flask import Flask
+
 
 app = Flask('')
 
@@ -27,15 +28,18 @@ def home():
 
 def run():
     # Use the port Render provides, or default to 10000
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
 def keep_alive():
     t = Thread(target=run)
     t.start()
-
+    
+if __name__ == "__main__":
+    keep_alive()
 # Call keep_alive() before your bot's polling starts
 keep_alive() 
+
 # Logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
