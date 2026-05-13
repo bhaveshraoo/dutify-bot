@@ -28,7 +28,7 @@ import pytz
 # USE THIS INSTEAD:
 india_now = datetime.now(pytz.timezone('Asia/Kolkata'))
 today = india_now.date()
-
+tomorrow = (india_now + timedelta(days=1)).date()
 app = Flask('')
 
 @app.route('/')
