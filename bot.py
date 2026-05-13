@@ -22,14 +22,13 @@ from flask import Flask
 from datetime import datetime
 import pytz
 
-# DON'T USE THIS:
-# today = datetime.now().date() 
+IST = pytz.timezone('Asia/Kolkata')
 
-# USE THIS INSTEAD:
-india_now = datetime.now(pytz.timezone('Asia/Kolkata'))
-today = india_now.date()
-tomorrow = (india_now + timedelta(days=1)).date()
+def get_now_ist():
+    """Helper to always get the current time in India."""
+    return datetime.now(IST)
 app = Flask('')
+
 
 @app.route('/')
 def home():
@@ -46,8 +45,6 @@ def keep_alive():
     
 if __name__ == "__main__":
     keep_alive()
-# Call keep_alive() before your bot's polling starts
-keep_alive() 
 
 # Logging
 logging.basicConfig(
@@ -101,14 +98,18 @@ def get_tag_emoji(tag: str) -> str:
 
 
 def parse_date(text: str) -> str | None:
-    """Parse various date formats → YYYY-MM-DD"""
+    """Parse various date formats → YYYY-MM-DD using IST"""
     formats = ["%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d", "%d %b %Y", "%d %B %Y"]
-    text = text.strip()
-    # Shorthand: "today", "tomorrow"
-    if text.lower() == "today":
-        return datetime.now().strftime("%Y-%m-%d")
-    if text.lower() == "tomorrow":
-        return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+    text = text.strip().lower()
+    
+    # Get current India time
+    now_ist = get_now_ist()
+
+    if text == "today":
+        return now_ist.strftime("%Y-%m-%d")
+    if text == "tomorrow":
+        return (now_ist + timedelta(days=1)).strftime("%Y-%m-%d")
+        
     for fmt in formats:
         try:
             return datetime.strptime(text, fmt).strftime("%Y-%m-%d")
@@ -213,14 +214,14 @@ async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def today_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    date = datetime.now().strftime("%Y-%m-%d")
+    # Use India date
+    date = get_now_ist().strftime("%Y-%m-%d")
     await show_day_checklist(update, context, date, "Today")
 
-
 async def tomorrow_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    date = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+    # Use India date + 1
+    date = (get_now_ist() + timedelta(days=1)).strftime("%Y-%m-%d")
     await show_day_checklist(update, context, date, "Tomorrow")
-
 
 async def date_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
@@ -618,13 +619,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif data == "today":
-        date = datetime.now().strftime("%Y-%m-%d")
+        date = get_now_ist().strftime("%Y-%m-%d")
         await show_day_from_callback(query, context, date, "Today")
 
     elif data == "tomorrow":
-        date = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        date = (get_now_ist() + timedelta(days=1)).strftime("%Y-%m-%d")
         await show_day_from_callback(query, context, date, "Tomorrow")
-
+        
     elif data == "anydate":
         await query.edit_message_text(
             "📅 Enter a date to view:\n_e.g. today, tomorrow, 25/12/2025_",
