@@ -18,7 +18,15 @@ from config import BOT_TOKEN, REMINDER_LEAD_TIMES
 import os
 from threading import Thread
 from flask import Flask
+from datetime import datetime
+import pytz
 
+# DON'T USE THIS:
+# today = datetime.now().date() 
+
+# USE THIS INSTEAD:
+india_now = datetime.now(pytz.timezone('Asia/Kolkata'))
+today = india_now.date()
 
 app = Flask('')
 
